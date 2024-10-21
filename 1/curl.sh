@@ -1,0 +1,1 @@
+curl --trace-ascii dump https://example.com -v

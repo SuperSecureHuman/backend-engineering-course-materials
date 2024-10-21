@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SSE Task Progress</title>
+</head>
+
+<body>
+    <h1>Task Progress</h1>
+    <div id="progress">Waiting for task to start...</div>
+
+    <script>
+        const eventSource = new EventSource('http://localhost:8000/task/example-task');
+        eventSource.onmessage = function (event) {
+            const data = JSON.parse(event.data);
+            document.getElementById('progress').innerText =
+                'Task ' + data.task_id + ' has ' + data.time_left + ' second(s) remaining.';
+            if (data.time_left <= 0) {
+                document.getElementById('progress').innerText = 'Task ' + data.task_id + ' has completed.';
+                eventSource.close();
+            }
+        };
+    </script>
+</body>
+
+</html>
